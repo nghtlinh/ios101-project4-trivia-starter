@@ -8,7 +8,7 @@
 import UIKit
 
 class TriviaViewController: UIViewController {
-  
+    
   @IBOutlet weak var currentQuestionNumberLabel: UILabel!
   @IBOutlet weak var questionContainerView: UIView!
   @IBOutlet weak var questionLabel: UILabel!
@@ -26,29 +26,64 @@ class TriviaViewController: UIViewController {
     super.viewDidLoad()
     addGradient()
     questionContainerView.layer.cornerRadius = 8.0
-    // TODO: FETCH TRIVIA QUESTIONS HERE
+    fetchTriviaQuestions()
   }
-  
+    
+    private func fetchTriviaQuestions() {
+            TriviaService.fetchTrivia { [weak self] questions in
+                guard let self = self else { return }
+
+                DispatchQueue.main.async {
+                    if !questions.isEmpty {
+                        self.questions = questions
+                        self.updateQuestion(withQuestionIndex: 0)
+                    } else {
+                        print("No questions fetched")
+                        // Handle empty questions case (e.g., show an error message or state)
+                    }
+                }
+            }
+        }
+    
   private func updateQuestion(withQuestionIndex questionIndex: Int) {
     currentQuestionNumberLabel.text = "Question: \(questionIndex + 1)/\(questions.count)"
     let question = questions[questionIndex]
     questionLabel.text = question.question
     categoryLabel.text = question.category
     let answers = ([question.correctAnswer] + question.incorrectAnswers).shuffled()
-    if answers.count > 0 {
-      answerButton0.setTitle(answers[0], for: .normal)
-    }
-    if answers.count > 1 {
-      answerButton1.setTitle(answers[1], for: .normal)
-      answerButton1.isHidden = false
-    }
-    if answers.count > 2 {
-      answerButton2.setTitle(answers[2], for: .normal)
-      answerButton2.isHidden = false
-    }
-    if answers.count > 3 {
-      answerButton3.setTitle(answers[3], for: .normal)
-      answerButton3.isHidden = false
+      
+    if question.type == "boolean" {
+        // Hide multiple-choice buttons and show true/false buttons
+        answerButton0.isHidden = false
+        answerButton1.isHidden = false
+        answerButton2.isHidden = true
+        answerButton3.isHidden = true
+
+        // Assuming you have two buttons for true/false questions
+        // Set titles for true/false buttons
+        answerButton0.setTitle("True", for: .normal)
+        answerButton1.setTitle("False", for: .normal)
+    } else {
+        answerButton0.isHidden = false
+        answerButton1.isHidden = false
+        answerButton2.isHidden = false
+        answerButton3.isHidden = false
+        
+        if answers.count > 0 {
+            answerButton0.setTitle(answers[0], for: .normal)
+        }
+        if answers.count > 1 {
+            answerButton1.setTitle(answers[1], for: .normal)
+            answerButton1.isHidden = false
+        }
+        if answers.count > 2 {
+            answerButton2.setTitle(answers[2], for: .normal)
+            answerButton2.isHidden = false
+        }
+        if answers.count > 3 {
+            answerButton3.setTitle(answers[3], for: .normal)
+            answerButton3.isHidden = false
+        }
     }
   }
   
@@ -57,11 +92,12 @@ class TriviaViewController: UIViewController {
       numCorrectQuestions += 1
     }
     currQuestionIndex += 1
-    guard currQuestionIndex < questions.count else {
-      showFinalScore()
-      return
-    }
-    updateQuestion(withQuestionIndex: currQuestionIndex)
+      if currQuestionIndex >= questions.count {
+          // Reached the end of the questions
+          showFinalScore()
+      } else {
+          updateQuestion(withQuestionIndex: currQuestionIndex)
+      }
   }
   
   private func isCorrectAnswer(_ answer: String) -> Bool {
@@ -75,7 +111,10 @@ class TriviaViewController: UIViewController {
     let resetAction = UIAlertAction(title: "Restart", style: .default) { [unowned self] _ in
       currQuestionIndex = 0
       numCorrectQuestions = 0
-      updateQuestion(withQuestionIndex: currQuestionIndex)
+      questions.removeAll() // Clear the current questions
+      // Fetch new questions
+      // no need to call update question again since it will auto display the first question after fetch() is called. Thus, the index will reset to 0 => updateQuestion() has division by 0 error
+      fetchTriviaQuestions()
     }
     alertController.addAction(resetAction)
     present(alertController, animated: true, completion: nil)
