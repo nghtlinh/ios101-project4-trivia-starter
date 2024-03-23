@@ -87,6 +87,7 @@ class TriviaViewController: UIViewController {
     }
   }
   
+    
   private func updateToNextQuestion(answer: String) {
     if isCorrectAnswer(answer) {
       numCorrectQuestions += 1
