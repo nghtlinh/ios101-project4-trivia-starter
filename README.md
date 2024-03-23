@@ -4,42 +4,31 @@ Submitted by: Monica Nguyen Hoang
 
 **Trivia Starter pt 2** is a simple trivia app that displays a question and 4 choices. This app has five questions and at the end, the score is calculated and the trivia is restarted.
 
-Time spent: **X** hours spent in total
+Time spent: **4** hours spent in total
 
 ## Required Features
 
 The following **required** functionality is completed:
 
-- [ ] User can view and answer at least 5 trivia questions.
-- [ ] App retrieves question data from the Open Trivia Database API.
-- [ ] Fetch a different set of questions if the user indicates they would like to reset the game.
-- [ ] Users can see score after submitting all questions.
-- [ ] True or False questions only have two options.
-
-
-The following **optional** features are implemented:
-
-  
-- [ ] Allow the user to choose a specific category of questions.
-- [ ] Provide the user feedback on whether each question was correct before navigating to the next.
-
-The following **additional** features are implemented:
-
-- [ ] List anything else that you can get done to improve the app functionality!
+- [x] User can view and answer at least 5 trivia questions.
+- [x] App retrieves question data from the Open Trivia Database API.
+- [x] Fetch a different set of questions if the user indicates they would like to reset the game.
+- [x] Users can see score after submitting all questions.
+- [x] True or False questions only have two options.
 
 ## Video Walkthrough
 
 Here is a reminder on how to embed Loom videos on GitHub. Feel free to remove this reminder once you upload your README. 
 
-[Guide]](https://www.youtube.com/watch?v=GA92eKlYio4) .
+[Guide]]([https://www.youtube.com/watch?v=GA92eKlYio4](https://www.loom.com/share/bc71f38af2ef46fd83a676d76b6e3a24)) .
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+It was difficult to parse the url at first.
 
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright [yyyy] [Monica Nguyen]
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
